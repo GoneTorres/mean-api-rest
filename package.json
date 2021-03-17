@@ -1,0 +1,19 @@
+{
+  "name": "api-rest-nodejs",
+  "version": "1.0.0",
+  "description": "\"NodeJs backend for MEAN stack project\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoneTorres/mean-api-rest.git"
+  },
+  "author": "Gonzalo Torres",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GoneTorres/mean-api-rest/issues"
+  },
+  "homepage": "https://github.com/GoneTorres/mean-api-rest#readme"
+}
