@@ -70,6 +70,26 @@ var projectController = {
 
             return response.status(200).send({ projects });
         });
+    },
+
+    updateProject: function(request, response) {
+        var projectId = request.params.id;
+
+        var updatedProject = request.body;
+
+        projectModel.findByIdAndUpdate(projectId, updatedProject, { new: true }, (err, projectUpdated) => {
+            if (err)
+                return response.status(500).send({
+                    message: "Error al actualizar los datos (" + err + ")",
+                });
+            if (!projectUpdated)
+                return response.status(404).send({
+                    message: "No se encontró el proyecto",
+                });
+
+            return response.status(200).send({ project: projectUpdated });
+        });
+
     }
 };
 
