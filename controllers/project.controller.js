@@ -40,10 +40,6 @@ var projectController = {
             return response.status(200).send({ project: projectStored })
         });
 
-        return response.status(200).send({
-            project: project,
-            message: "Project created.",
-        });
     },
 };
 
