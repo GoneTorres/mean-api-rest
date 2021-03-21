@@ -34,12 +34,27 @@ var projectController = {
                 });
             if (!projectStored)
                 return response.status(404).send({
-                    message: "No se pudo guardar el projecto",
+                    message: "No se pudo guardar el proyecto",
                 });
 
-            return response.status(200).send({ project: projectStored })
+            return response.status(200).send({ project: projectStored });
         });
+    },
+    getProject: function(request, response) {
+        var projectId = request.params.id;
 
+        projectModel.findById(projectId, (err, projecto) => {
+            if (err)
+                return response.status(500).send({
+                    message: "Error al obtener los datos (" + err + ")",
+                });
+            if (!projecto)
+                return response.status(404).send({
+                    message: "No se encontró el proyecto",
+                });
+
+            return response.status(200).send({ projecto });
+        });
     },
 };
 
