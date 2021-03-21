@@ -90,6 +90,24 @@ var projectController = {
             return response.status(200).send({ project: projectUpdated });
         });
 
+    },
+
+    deleteProject: function(request, response) {
+        var projectId = request.params.id;
+
+        projectModel.findByIdAndDelete(projectId, (err, projectDeleted) => {
+            if (err)
+                return response.status(500).send({
+                    message: "Error al borrar los datos (" + err + ")",
+                });
+            if (!projectDeleted)
+                return response.status(404).send({
+                    message: "No se encontró el proyecto",
+                });
+
+            return response.status(200).send({ projectDeleted });
+        });
+
     }
 };
 
