@@ -43,19 +43,34 @@ var projectController = {
     getProject: function(request, response) {
         var projectId = request.params.id;
 
-        projectModel.findById(projectId, (err, projecto) => {
+        projectModel.findById(projectId, (err, project) => {
             if (err)
                 return response.status(500).send({
                     message: "Error al obtener los datos (" + err + ")",
                 });
-            if (!projecto)
+            if (!project)
                 return response.status(404).send({
                     message: "No se encontró el proyecto",
                 });
 
-            return response.status(200).send({ projecto });
+            return response.status(200).send({ project });
         });
     },
+
+    getProjects: function(request, response) {
+        projectModel.find({}).sort('year').exec((err, projects) => {
+            if (err)
+                return response.status(500).send({
+                    message: "Error al obtener los datos (" + err + ")",
+                });
+            if (!projects)
+                return response.status(404).send({
+                    message: "No se encontró el proyecto",
+                });
+
+            return response.status(200).send({ projects });
+        });
+    }
 };
 
 module.exports = projectController;
