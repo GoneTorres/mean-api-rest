@@ -1,6 +1,7 @@
 "use strict";
 
 var projectModel = require("../models/project.model");
+var fs = require('fs');
 
 var projectController = {
     home: function(request, response) {
@@ -58,18 +59,21 @@ var projectController = {
     },
 
     getProjects: function(request, response) {
-        projectModel.find({}).sort('year').exec((err, projects) => {
-            if (err)
-                return response.status(500).send({
-                    message: "Error al obtener los datos (" + err + ")",
-                });
-            if (!projects)
-                return response.status(404).send({
-                    message: "No se encontró el proyecto",
-                });
+        projectModel
+            .find({})
+            .sort("year")
+            .exec((err, projects) => {
+                if (err)
+                    return response.status(500).send({
+                        message: "Error al obtener los datos (" + err + ")",
+                    });
+                if (!projects)
+                    return response.status(404).send({
+                        message: "No se encontró el proyecto",
+                    });
 
-            return response.status(200).send({ projects });
-        });
+                return response.status(200).send({ projects });
+            });
     },
 
     updateProject: function(request, response) {
@@ -77,19 +81,22 @@ var projectController = {
 
         var updatedProject = request.body;
 
-        projectModel.findByIdAndUpdate(projectId, updatedProject, { new: true }, (err, projectUpdated) => {
-            if (err)
-                return response.status(500).send({
-                    message: "Error al actualizar los datos (" + err + ")",
-                });
-            if (!projectUpdated)
-                return response.status(404).send({
-                    message: "No se encontró el proyecto",
-                });
+        projectModel.findByIdAndUpdate(
+            projectId,
+            updatedProject, { new: true },
+            (err, projectUpdated) => {
+                if (err)
+                    return response.status(500).send({
+                        message: "Error al actualizar los datos (" + err + ")",
+                    });
+                if (!projectUpdated)
+                    return response.status(404).send({
+                        message: "No se encontró el proyecto",
+                    });
 
-            return response.status(200).send({ project: projectUpdated });
-        });
-
+                return response.status(200).send({ project: projectUpdated });
+            }
+        );
     },
 
     deleteProject: function(request, response) {
@@ -111,31 +118,48 @@ var projectController = {
 
     uploadImage: function(request, response) {
         var projectId = request.params.id;
-        var fileName = 'new image';
+        var fileName = "new image";
 
         if (request.files) {
             var filePath = request.files.image.path;
-            var fileSplit = filePath.split('\\');
+            var fileSplit = filePath.split("\\");
             fileName = fileSplit[1];
+            var fileNameSplit = fileName.split(".");
+            var fileExtension = fileNameSplit[1];
 
-            projectModel.findByIdAndUpdate(projectId, { image: fileName }, (err, projectUpdated) => {
-                if (err)
-                    return response.status(500)({ message: 'La imagen no se ha subido' });
+            if (
+                fileExtension == "png" ||
+                fileExtension == "jpg" ||
+                fileExtension == "jpeg" ||
+                fileExtension == "gif"
+            ) {
+                projectModel.findByIdAndUpdate(
+                    projectId, { image: fileName },
+                    (err, projectUpdated) => {
+                        if (err)
+                            return response.status(500)({
+                                message: "La imagen no se ha subido",
+                            });
 
-                if (!projectUpdated)
-                    return response.status(404).send({
-                        message: "No se encontró el proyecto",
-                    });
+                        if (!projectUpdated)
+                            return response.status(404).send({
+                                message: "No se encontró el proyecto",
+                            });
 
-                return response.status(200).send({ project: projectUpdated });
-
-            })
+                        return response.status(200).send({ project: projectUpdated });
+                    }
+                );
+            } else {
+                fs.unlink(filePath, (err) => {
+                    return response.status(200).send({ message: "La extensión no es válida." });
+                })
+            }
         } else {
             return response.status(500).send({
                 message: "Imagen no subida",
             });
         }
-    }
+    },
 };
 
 module.exports = projectController;
