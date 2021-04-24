@@ -1,0 +1,15 @@
+<header>
+    <ul>
+        <li><a [routerLink]="['/sobre-mi']" routerLinkActive="router-link-active">Sobre mi</a></li>
+        <li><a [routerLink]="['/proyectos']" routerLinkActive="router-link-active">Proyectos</a></li>
+        <li id="logo"><a href="#">GT</a></li>
+        <li><a [routerLink]="['/crear-proyecto']" routerLinkActive="router-link-active">Crear Proyecto</a></li>
+        <li><a [routerLink]="['/contacto']" routerLinkActive="router-link-active">Contacto</a></li>
+    </ul>
+</header>
+<section id="content">
+    <router-outlet></router-outlet>
+</section>
+<footer>
+    Gonzalo Torres Tonkowicz &copy;
+</footer>
